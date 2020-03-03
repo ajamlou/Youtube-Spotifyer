@@ -33,12 +33,16 @@ class add_songs_to_spotify:
         query_artist = artist
         search_results = self.spotifyObject.search(
             q='artist:' + query_artist + ' track:' + query_song)
-        song_uri = search_results['tracks']['items'][0]['uri']
-        playlist = self.spotifyObject.user_playlists(self.user['id'])['items'][0]['id']
-        self.spotifyObject.user_playlist_add_tracks(
-            self.user['id'], playlist_id=playlist, tracks=[song_uri])
+        print('A')
+        try:
+            song_uri = search_results['tracks']['items'][0]['uri']
+            playlist = self.spotifyObject.user_playlists(self.user['id'])['items'][0]['id']
+            self.spotifyObject.user_playlist_add_tracks(
+                self.user['id'], playlist_id=playlist, tracks=[song_uri])
+        except (IndexError):
+            print('Song or artist was not found.')
 
-#add_songs_to_spotify().add_songs(song, artist)
+#add_songs_to_spotify().add_songs('dhwkjeh', 'ewrerrwe')
 
     # while True:
     #     print()

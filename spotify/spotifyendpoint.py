@@ -22,3 +22,19 @@ except (AttributeError, JSONDecodeError):
         username, scope, Spotify.client_id, Spotify.client_secret, Spotify.redirect_uri)  # add scope
 
 spotifyObject = spotipy.Spotify(auth=token)
+user = spotifyObject.current_user()
+displayName = user['display_name']
+followers = followers = user['followers']['total']
+
+while True:
+    print()
+    print(">>> Welcome to Spotipy " + displayName + "!")
+    print(">>> You have " + str(followers) + " followers.")
+    print()
+    print("0 - Search for an artist")
+    print("1 - exit")
+    print()
+    choice = input("Your choice: ")
+
+    if choice == 1:
+        break

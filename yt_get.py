@@ -6,6 +6,7 @@
 import os
 from os import path
 
+import spotify.spotifyendpoint
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
@@ -80,10 +81,11 @@ def main():
         items = response["items"]
         for item in items:
             if item["id"] not in big_dic:
+                big_dic[item["id"]] = big_dic.get((item["id"], item["snippet"]["title"]), [])
                 video_name = item["snippet"]["title"]
                 split_video_name = video_name.split(' - ') #[ARTIST, LÅTNAMN]
-                split_video_name = tuple(split_video_name)
-        time.sleep(60)
+                spotify.spotifyendpoint.add_songs_to_spotify().add_songs(split_video_name[1], split_video_name[0])
+        time.sleep(30)
     print("existed endless oop")
 
 

@@ -1,7 +1,6 @@
 import os
 import spotipy
 import spotipy.util as util
-import spotify
 from json.decoder import JSONDecodeError
 
 song = 'bara du'
@@ -10,18 +9,21 @@ artist = 'kasbo'
 
 class add_songs_to_spotify:
 
+
+    client_id = "6cb010cfc3774f8ca5247a501664a548"
+    client_secret = "d99c3963895a4f029e1829443ff7b9e9"
+    redirect_uri = "https://google.com/"
     username = "kodstuga"
     scope = 'user-read-private user-read-playback-state user-modify-playback-state playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private'
 
-    Spotify = spotify.Spotify()
 
     try:
         token = util.prompt_for_user_token(
-            username, scope, Spotify.client_id, Spotify.client_secret, Spotify.redirect_uri)  # add scope
+            username, scope, client_id, client_secret, redirect_uri)  # add scope
     except (AttributeError, JSONDecodeError):
         os.remove(f".cache-{username}")
         token = util.prompt_for_user_token(
-            username, scope, Spotify.client_id, Spotify.client_secret, Spotify.redirect_uri)  # add scope
+            username, scope, client_id, client_secret, redirect_uri)  # add scope
 
     spotifyObject = spotipy.Spotify(auth=token)
     user = spotifyObject.current_user()
@@ -33,12 +35,16 @@ class add_songs_to_spotify:
         query_artist = artist
         search_results = self.spotifyObject.search(
             q='artist:' + query_artist + ' track:' + query_song)
-        song_uri = search_results['tracks']['items'][0]['uri']
-        playlist = self.spotifyObject.user_playlists(self.user['id'])['items'][0]['id']
-        self.spotifyObject.user_playlist_add_tracks(
-            self.user['id'], playlist_id=playlist, tracks=[song_uri])
+        print('A')
+        try:
+            song_uri = search_results['tracks']['items'][0]['uri']
+            playlist = self.spotifyObject.user_playlists(self.user['id'])['items'][0]['id']
+            self.spotifyObject.user_playlist_add_tracks(
+                self.user['id'], playlist_id=playlist, tracks=[song_uri])
+        except (IndexError):
+            print('Song or artist was not found.')
 
-#add_songs_to_spotify().add_songs(song, artist)
+#add_songs_to_spotify().add_songs('dhwkjeh', 'ewrerrwe')
 
     # while True:
     #     print()
